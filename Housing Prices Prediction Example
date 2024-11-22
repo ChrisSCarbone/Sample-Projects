@@ -1,0 +1,23 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+
+print("Script Started")
+print("Data Load Started")
+data_url = "https://raw.githubusercontent.com/ageron/handson-ml/master/datasets/housing/housing.csv"
+print("Data Load Complete")
+df = pd.read_csv(data_url)
+df = df.dropna()
+X = df.drop('median_house_value', axis=1)
+y = df['median_house_value']
+X = pd.get_dummies(X, drop_first=True)
+print("Model Training Started")
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = RandomForestRegressor()
+model.fit(X_train, y_train)
+print("Model Training Complete")
+y_pred = model.predict(X_test)
+rmse = mean_squared_error(y_test, y_pred, squared=False)
+print(f"RMSE: {rmse}")
+print("Script Complete")
